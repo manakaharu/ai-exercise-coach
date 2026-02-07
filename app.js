@@ -204,4 +204,36 @@ async function init() {
   detectPose();
 }
 
+// ================= ZOOM CONTROL =================
+const zoomWrapper = document.getElementById("zoomWrapper");
+const zoomInBtn = document.getElementById("zoomIn");
+const zoomOutBtn = document.getElementById("zoomOut");
+const zoomResetBtn = document.getElementById("zoomReset");
+
+let zoomLevel = 1;
+const ZOOM_STEP = 0.1;
+const ZOOM_MIN = 0.7;
+const ZOOM_MAX = 1.5;
+
+function applyZoom() {
+  zoomWrapper.style.transform = `scale(${zoomLevel})`;
+  zoomResetBtn.textContent = `${Math.round(zoomLevel * 100)}%`;
+}
+
+zoomInBtn.onclick = () => {
+  zoomLevel = Math.min(ZOOM_MAX, zoomLevel + ZOOM_STEP);
+  applyZoom();
+};
+
+zoomOutBtn.onclick = () => {
+  zoomLevel = Math.max(ZOOM_MIN, zoomLevel - ZOOM_STEP);
+  applyZoom();
+};
+
+zoomResetBtn.onclick = () => {
+  zoomLevel = 1;
+  applyZoom();
+};
+
 init();
+
