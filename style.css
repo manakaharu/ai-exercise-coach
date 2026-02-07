@@ -39,7 +39,7 @@ html, body {
 /* CAMERA */
 .camera-box {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   background: black;
   border-radius: 16px;
   overflow: hidden;
@@ -118,3 +118,4 @@ html, body {
   border-radius: 18px;
   padding: 18px;
 }
+
