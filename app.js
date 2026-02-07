@@ -29,7 +29,7 @@ let squatState = "UP";
 let currentLang = "TH";
 let currentMode = "AUTO";
 
-const COOLDOWN_MS = 5000;
+const COOLDOWN_SEC = 5;
 let canCount = false;
 let cooldownTimer = null;
 
@@ -45,7 +45,7 @@ langBtn.onclick = () => {
   repLabel.textContent = TEXT[currentLang].reps;
 };
 
-// ================= MODE CONTROL =================
+// ================= MODE =================
 modeButtons.forEach(btn => {
   btn.addEventListener("click", () => {
     modeButtons.forEach(b => b.classList.remove("active"));
@@ -108,10 +108,9 @@ startBtn.onclick = () => {
   repValue.textContent = "0";
   scoreValue.textContent = "0%";
 
-  // clear old timer
   if (cooldownTimer) clearInterval(cooldownTimer);
 
-  let remaining = 5;
+  let remaining = COOLDOWN_SEC;
   feedback.textContent = `Get ready... ${remaining}s`;
 
   cooldownTimer = setInterval(() => {
@@ -155,7 +154,7 @@ async function detectPose() {
   requestAnimationFrame(detectPose);
 }
 
-// ================= POSE RESULT =================
+// ================= DRAW + LOGIC =================
 function onPoseResults(results) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!results.poseLandmarks) return;
@@ -173,7 +172,7 @@ function onPoseResults(results) {
   if (isSessionActive) detectSquat(results.poseLandmarks);
 }
 
-// ================= SQUAT LOGIC =================
+// ================= SQUAT =================
 function detectSquat(lm) {
   if (!canCount) return;
 
@@ -204,36 +203,4 @@ async function init() {
   detectPose();
 }
 
-// ================= ZOOM CONTROL =================
-const zoomWrapper = document.getElementById("zoomWrapper");
-const zoomInBtn = document.getElementById("zoomIn");
-const zoomOutBtn = document.getElementById("zoomOut");
-const zoomResetBtn = document.getElementById("zoomReset");
-
-let zoomLevel = 1;
-const ZOOM_STEP = 0.1;
-const ZOOM_MIN = 0.7;
-const ZOOM_MAX = 1.5;
-
-function applyZoom() {
-  zoomWrapper.style.transform = `scale(${zoomLevel})`;
-  zoomResetBtn.textContent = `${Math.round(zoomLevel * 100)}%`;
-}
-
-zoomInBtn.onclick = () => {
-  zoomLevel = Math.min(ZOOM_MAX, zoomLevel + ZOOM_STEP);
-  applyZoom();
-};
-
-zoomOutBtn.onclick = () => {
-  zoomLevel = Math.max(ZOOM_MIN, zoomLevel - ZOOM_STEP);
-  applyZoom();
-};
-
-zoomResetBtn.onclick = () => {
-  zoomLevel = 1;
-  applyZoom();
-};
-
 init();
-
