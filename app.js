@@ -17,7 +17,6 @@ const summaryText = document.getElementById("summaryText");
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 
-// ⭐ MODE BUTTONS (จุดสำคัญ)
 const modeButtons = document.querySelectorAll(".mode-controls .control-btn");
 
 // ================= STATE =================
@@ -28,7 +27,8 @@ let sessionStartTime = null;
 let repCount = 0;
 let squatState = "UP";
 let currentLang = "TH";
-let currentMode = "AUTO"; // ⭐ สำคัญ
+let currentMode = "AUTO";
+
 const COOLDOWN_MS = 5000;
 let canCount = false;
 let cooldownTimer = null;
@@ -45,26 +45,20 @@ langBtn.onclick = () => {
   repLabel.textContent = TEXT[currentLang].reps;
 };
 
-// ================= MODE CONTROL (แก้หลัก) =================
+// ================= MODE CONTROL =================
 modeButtons.forEach(btn => {
   btn.addEventListener("click", () => {
-    // ลบ active ทุกปุ่ม
     modeButtons.forEach(b => b.classList.remove("active"));
-
-    // ใส่ active ให้ปุ่มที่กด
     btn.classList.add("active");
 
-    // เปลี่ยน mode จริง
     currentMode = btn.dataset.mode;
 
-    // reset ค่า
     repCount = 0;
     squatState = "UP";
     repValue.textContent = "0";
     scoreValue.textContent = "--%";
 
     feedback.textContent = `Mode: ${currentMode}`;
-    console.log("MODE =", currentMode);
   });
 });
 
@@ -114,31 +108,33 @@ startBtn.onclick = () => {
   repValue.textContent = "0";
   scoreValue.textContent = "0%";
 
-  feedback.textContent = "Get ready... 5s";
+  // clear old timer
+  if (cooldownTimer) clearInterval(cooldownTimer);
 
-  // clear old timer just in case
-  if (cooldownTimer) clearTimeout(cooldownTimer);
+  let remaining = 5;
+  feedback.textContent = `Get ready... ${remaining}s`;
 
-  cooldownTimer = setTimeout(() => {
-    canCount = true;
-    feedback.textContent = "GO!";
-  }, COOLDOWN_MS);
+  cooldownTimer = setInterval(() => {
+    remaining--;
+    if (remaining > 0) {
+      feedback.textContent = `Get ready... ${remaining}s`;
+    } else {
+      clearInterval(cooldownTimer);
+      canCount = true;
+      feedback.textContent = "GO!";
+    }
+  }, 1000);
 };
 
-let remaining = 5;
-feedback.textContent = `Get ready... ${remaining}s`;
+stopBtn.onclick = () => {
+  isSessionActive = false;
+  canCount = false;
 
-cooldownTimer = setInterval(() => {
-  remaining--;
-  if (remaining > 0) {
-    feedback.textContent = `Get ready... ${remaining}s`;
-  } else {
-    clearInterval(cooldownTimer);
-    canCount = true;
-    feedback.textContent = "GO!";
-  }
-}, 1000);
+  if (cooldownTimer) clearInterval(cooldownTimer);
 
+  const duration = Math.round((Date.now() - sessionStartTime) / 1000);
+  summaryText.textContent = `Time: ${duration}s | Reps: ${repCount}`;
+};
 
 // ================= MEDIAPIPE =================
 const pose = new Pose({
@@ -179,7 +175,7 @@ function onPoseResults(results) {
 
 // ================= SQUAT LOGIC =================
 function detectSquat(lm) {
-  if (!canCount) return; // ⛔ ignore during cooldown
+  if (!canCount) return;
 
   const hip = lm[23];
   const knee = lm[25];
@@ -209,6 +205,3 @@ async function init() {
 }
 
 init();
-
-
-
