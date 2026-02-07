@@ -29,6 +29,9 @@ let repCount = 0;
 let squatState = "UP";
 let currentLang = "TH";
 let currentMode = "AUTO"; // ⭐ สำคัญ
+const COOLDOWN_MS = 5000;
+let canCount = false;
+let cooldownTimer = null;
 
 // ================= LANGUAGE =================
 const TEXT = {
@@ -184,3 +187,4 @@ async function init() {
 }
 
 init();
+
