@@ -105,19 +105,24 @@ cameraSelect.onchange = () => startCamera(cameraSelect.value);
 // ================= SESSION =================
 startBtn.onclick = () => {
   isSessionActive = true;
+  canCount = false;
+
   repCount = 0;
   squatState = "UP";
   sessionStartTime = Date.now();
 
   repValue.textContent = "0";
   scoreValue.textContent = "0%";
-  feedback.textContent = "Session started";
-};
 
-stopBtn.onclick = () => {
-  isSessionActive = false;
-  const duration = Math.round((Date.now() - sessionStartTime) / 1000);
-  summaryText.textContent = `Time: ${duration}s | Reps: ${repCount}`;
+  feedback.textContent = "Get ready... 5s";
+
+  // clear old timer just in case
+  if (cooldownTimer) clearTimeout(cooldownTimer);
+
+  cooldownTimer = setTimeout(() => {
+    canCount = true;
+    feedback.textContent = "GO!";
+  }, COOLDOWN_MS);
 };
 
 // ================= MEDIAPIPE =================
@@ -159,6 +164,8 @@ function onPoseResults(results) {
 
 // ================= SQUAT LOGIC =================
 function detectSquat(lm) {
+  if (!canCount) return; // ⛔ ignore during cooldown
+
   const hip = lm[23];
   const knee = lm[25];
   if (!hip || !knee) return;
@@ -187,4 +194,5 @@ async function init() {
 }
 
 init();
+
 
