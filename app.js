@@ -125,6 +125,21 @@ startBtn.onclick = () => {
   }, COOLDOWN_MS);
 };
 
+let remaining = 5;
+feedback.textContent = `Get ready... ${remaining}s`;
+
+cooldownTimer = setInterval(() => {
+  remaining--;
+  if (remaining > 0) {
+    feedback.textContent = `Get ready... ${remaining}s`;
+  } else {
+    clearInterval(cooldownTimer);
+    canCount = true;
+    feedback.textContent = "GO!";
+  }
+}, 1000);
+
+
 // ================= MEDIAPIPE =================
 const pose = new Pose({
   locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}`
@@ -194,5 +209,6 @@ async function init() {
 }
 
 init();
+
 
 
