@@ -9,76 +9,68 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- ZOOM CONTROLS (ไม่โดนซูม) -->
-<div class="zoom-controls">
-  <button id="zoomOut">−</button>
-  <button id="zoomReset">100%</button>
-  <button id="zoomIn">+</button>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>AI Exercise Coach</h1>
+    <button class="lang-btn" id="langBtn">TH / EN</button>
+  </div>
+
+  <!-- CAMERA -->
+  <div class="camera-box">
+    <video id="camera" autoplay muted playsinline></video>
+    <canvas id="overlay"></canvas>
+  </div>
+
+  <!-- CAMERA SELECT -->
+  <div class="camera-settings">
+    <select id="cameraSelect"></select>
+  </div>
+
+  <!-- MODE -->
+  <div class="controls mode-controls">
+    <button class="control-btn active" data-mode="AUTO">AUTO</button>
+    <button class="control-btn" data-mode="LOW_SQUAT">LOW SQUAT</button>
+    <button class="control-btn" data-mode="PUSHUP">PUSH-UP</button>
+  </div>
+
+  <!-- START / STOP -->
+  <div class="controls">
+    <button id="startBtn" class="control-btn">START</button>
+    <button id="stopBtn" class="control-btn">STOP</button>
+  </div>
+
+  <!-- SCORE -->
+  <div class="score-box">
+    <div class="score-label" id="scoreLabel">SCORE</div>
+    <div class="score-value" id="scoreValue">--%</div>
+  </div>
+
+  <div class="score-box">
+    <div class="score-label" id="repLabel">REPS</div>
+    <div class="score-value" id="repValue">0</div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback" id="feedback">
+    Press START
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <h2>Summary</h2>
+    <p id="summaryText">
+      ระบบจะสรุปผลหลังจากตรวจจับท่าออกกำลังกาย
+    </p>
+  </div>
+
 </div>
 
-<!-- ZOOM WRAPPER -->
-<div id="zoomWrapper">
-  <div class="app">
-    <!-- HEADER -->
-    <div class="header">
-      <h1>AI Exercise Coach</h1>
-      <button class="lang-btn" id="langBtn">TH / EN</button>
-    </div>
-
-    <!-- CAMERA -->
-    <div class="camera-box">
-      <video id="camera" autoplay muted playsinline></video>
-      <canvas id="overlay"></canvas>
-    </div>
-
-    <!-- CAMERA SELECT -->
-    <div class="camera-settings">
-      <select id="cameraSelect"></select>
-    </div>
-
-    <!-- MODE -->
-    <div class="controls mode-controls">
-      <button class="control-btn active" data-mode="AUTO">AUTO</button>
-      <button class="control-btn" data-mode="LOW_SQUAT">LOW SQUAT</button>
-      <button class="control-btn" data-mode="PUSHUP">PUSH-UP</button>
-    </div>
-
-    <!-- START / STOP -->
-    <div class="controls">
-      <button id="startBtn" class="control-btn">START</button>
-      <button id="stopBtn" class="control-btn">STOP</button>
-    </div>
-
-    <! -- SCORE -->
-    <div class="score-box">
-      <div class="score-label" id="scoreLabel">SCORE</div>
-      <div class="score-value" id="scoreValue">--%</div>
-    </div>
-
-    <div class="score-box">
-      <div class="score-label" id="repLabel">REPS</div>
-      <div class="score-value" id="repValue">0</div>
-    </div>
-
-    <!-- FEEDBACK -->
-    <div class="feedback" id="feedback">
-      Press START
-    </div>
-
-    <!-- SUMMARY -->
-    <div class="summary">
-      <h2>Summary</h2>
-      <p id="summaryText">
-        ระบบจะสรุปผลหลังจากตรวจจับท่าออกกำลังกาย
-      </p>
-    </div>
-  </div>
-  
-  <!-- MediaPipe -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
-  <script type="module" src="app.js"></script>
-
+<!-- MediaPipe -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
-
